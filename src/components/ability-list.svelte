@@ -58,6 +58,7 @@
   textarea {
     width: 100%;
     font-size: 0.75rem;
+    padding: 0.5rem;
   }
 
   .ability-header {

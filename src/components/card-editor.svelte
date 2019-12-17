@@ -44,12 +44,17 @@
     ]
   };
 
-  let scale = 1;
+  let scale = 1.5;
 
   const cardTypes = [
     { id: "creature", text: "Creature" },
     { id: "item", text: "Item" }
   ];
+
+  const zoom = ({zoomIn = true, amount = 0.1}) => {
+    const multiplier = zoomIn ? 1 : -1
+    scale = scale + (amount * multiplier)
+  }
 </script>
 
 <style>
@@ -72,6 +77,7 @@
     background: white;
     display: flex;
     flex-direction: column;
+    max-width: 40rem;
   }
 
   button {
@@ -110,6 +116,7 @@
   .form-el {
     padding-bottom: 0.5rem;
     padding-right: 1rem;
+    flex: 1;
   }
 
   .ability-list-container {
@@ -154,9 +161,9 @@
   <div class="card">
     <Card {...{ card, scale }} />
     <div class="card-view-settings">
-      <button on:click={() => (scale += 0.1)}>+</button>
-      <span>{scale * 100} %</span>
-      <button on:click={() => (scale -= 0.1)}>-</button>
+      <button on:click={() => zoom({zoomIn: true})}>+</button>
+      <span>{_.round(scale * 100)} %</span>
+      <button on:click={() => zoom({zoomIn: false})}>-</button>
     </div>
   </div>
   <div class="editor-tools">

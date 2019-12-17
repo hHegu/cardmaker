@@ -153,6 +153,14 @@
     height: 100%;
     padding-left: 1mm;
   }
+
+  @media print {
+    .card {
+      box-shadow: none;
+      border: 1px solid #4e4e4e;
+      transform: none !important;
+    }
+  }
 </style>
 
 <div class="card" style={scale ? `transform: scale(${scale})` : ''}>
