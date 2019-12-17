@@ -16,7 +16,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let card = {
+  export let card = {
     cost: undefined,
     name: undefined,
     type: "creature",
@@ -61,8 +61,6 @@
     const multiplier = zoomIn ? 1 : -1;
     scale = scale + amount * multiplier;
   };
-
-  // const save =
 </script>
 
 <style>

@@ -68,14 +68,18 @@ button:focus {
   border-color: #666;
 }
 
+button:hover {
+  background: rgb(185, 185, 185);
+}
+
 button {
   color: black;
   font-weight: 500;
   border-radius: 0.25rem;
   border: 0;
-  /* box-shadow: 1px 1px 3px 0px #333333c2; */
   cursor: pointer;
   padding: 0.5rem 1rem;
+  transition: 0.1s;
 }
 
 .button-primary {
