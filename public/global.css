@@ -47,7 +47,7 @@ textarea {
   margin: 0;
   box-sizing: border-box;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 0.2rem;
   font-size: 0.8rem;
 }
@@ -70,16 +70,26 @@ button:focus {
 
 button {
   color: black;
-  background-color: var(--primary-color);
   font-weight: 500;
-  border-radius: 0.5rem;
+  border-radius: 0.25rem;
   border: 0;
-  box-shadow: 1px 1px 3px 0px #333333c2;
+  /* box-shadow: 1px 1px 3px 0px #333333c2; */
   cursor: pointer;
+  padding: 0.5rem 1rem;
+}
+
+.button-primary {
+  background: var(--primary-color)
 }
 
 button:not(:disabled):active {
   font-weight: 500;
   background-color: var(--light-color);
   box-shadow: none;
+}
+
+.icon-button {
+  background: none;
+  box-shadow: none;
+  padding: 0;
 }

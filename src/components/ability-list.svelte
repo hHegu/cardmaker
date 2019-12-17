@@ -33,12 +33,6 @@
     margin: 0 0 0.5rem 0;
   }
 
-  button {
-    background: none;
-    box-shadow: none;
-    padding: 0;
-  }
-
   .ability {
     padding: 0.5rem;
     margin-bottom: 0.5rem;
@@ -75,6 +69,7 @@
         <div>
           {#if i < abilities.length - 1}
             <button
+              class="icon-button"
               on:click={() => {
                 abilities = moveArrayElement({
                   array: abilities,
@@ -88,6 +83,7 @@
 
           {#if i > 0}
             <button
+              class="icon-button"
               on:click={() => {
                 if (i > 0) {
                   abilities = moveArrayElement({
@@ -102,6 +98,7 @@
           {/if}
 
           <button
+            class="icon-button"
             on:click={() => {
               abilities.splice(i, 1);
               abilities = abilities;
@@ -129,7 +126,7 @@
         </div>
         <div class="ability-description">
           <label>Description</label>
-          <textarea rows=3 bind:value={description} />
+          <textarea rows="3" bind:value={description} />
         </div>
       </div>
 

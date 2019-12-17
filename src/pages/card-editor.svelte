@@ -1,15 +1,20 @@
 <script>
   import _ from "lodash";
 
+  import { createEventDispatcher } from "svelte";
+
   import Icon from "fa-svelte";
 
   import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
   import { faArrowUp } from "@fortawesome/free-solid-svg-icons/faArrowUp";
   import { faArrowDown } from "@fortawesome/free-solid-svg-icons/faArrowDown";
   import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
+  import { faMinus } from "@fortawesome/free-solid-svg-icons/faMinus";
 
   import Card from "../components/card.svelte";
   import AbilityList from "../components/ability-list.svelte";
+
+  const dispatch = createEventDispatcher();
 
   let card = {
     cost: undefined,
@@ -45,16 +50,19 @@
   };
 
   let scale = 1.5;
+  $: scalePercentage = `${_.round(scale * 100)}%`;
 
   const cardTypes = [
     { id: "creature", text: "Creature" },
     { id: "item", text: "Item" }
   ];
 
-  const zoom = ({zoomIn = true, amount = 0.1}) => {
-    const multiplier = zoomIn ? 1 : -1
-    scale = scale + (amount * multiplier)
-  }
+  const zoom = ({ zoomIn = true, amount = 0.1 }) => {
+    const multiplier = zoomIn ? 1 : -1;
+    scale = scale + amount * multiplier;
+  };
+
+  // const save =
 </script>
 
 <style>
@@ -78,12 +86,6 @@
     display: flex;
     flex-direction: column;
     max-width: 40rem;
-  }
-
-  button {
-    background: none;
-    box-shadow: none;
-    padding: 0;
   }
 
   .card-ability-title {
@@ -130,7 +132,7 @@
     margin: 0;
   }
 
-  .card-view-settings {
+  .card-zoom-settings {
     background: white;
     margin-top: 1rem;
     padding: 0.5rem 1rem;
@@ -139,19 +141,33 @@
     bottom: 1rem;
   }
 
-  .card-view-settings > button {
-    padding: 1rem;
+  .card-zoom-settings > button {
+    padding: 0.5rem;
     border: 1px solid black;
-    font-size: 1rem;
+    font-size: 0.75rem;
     line-height: 0;
     text-align: center;
   }
+
+  .card-buttons {
+    flex: 1;
+    justify-content: space-between;
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+  }
+
+  .card-buttons > button {
+    font-size: 1rem;
+    width: 10rem;
+  }
+
   @media print {
     .editor-tools {
       display: none;
     }
 
-    .card-view-settings {
+    .card-zoom-settings {
       display: none;
     }
   }
@@ -160,10 +176,14 @@
 <cardEditor>
   <div class="card">
     <Card {...{ card, scale }} />
-    <div class="card-view-settings">
-      <button on:click={() => zoom({zoomIn: true})}>+</button>
-      <span>{_.round(scale * 100)} %</span>
-      <button on:click={() => zoom({zoomIn: false})}>-</button>
+    <div class="card-zoom-settings">
+      <button class="icon-button" on:click={() => zoom({ zoomIn: true })}>
+        <Icon icon={faPlus} />
+      </button>
+      <span class="zoom-percentage">{scalePercentage}</span>
+      <button class="icon-button" on:click={() => zoom({ zoomIn: false })}>
+        <Icon icon={faMinus} />
+      </button>
     </div>
   </div>
   <div class="editor-tools">
@@ -215,6 +235,7 @@
       <div class="card-ability-title">
         <h3>Abilities</h3>
         <button
+          class="icon-button"
           on:click={() => {
             card.abilities.push({});
             card.abilities = card.abilities;
@@ -226,6 +247,10 @@
     </div>
     <div class="ability-list-container">
       <AbilityList bind:abilities={card.abilities} />
+    </div>
+    <div class="card-buttons">
+      <button on:click={() => dispatch('save', card)}>Save</button>
+      <button on:click={() => dispatch('cancel')}>Cancel</button>
     </div>
   </div>
 </cardEditor>

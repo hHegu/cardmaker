@@ -1,7 +1,13 @@
 <script>
+  import _ from "lodash";
   import Lander from "./pages/lander.svelte";
-  import NewCard from "./pages/new-card.svelte";
-  let page = "new-card";
+  import CardEditor from "./pages/card-editor.svelte";
+  let page = "card-editor";
+  const cards = [];
+  const saveCard = ({ detail }) => {
+    cards.push(_.clone(detail));
+    console.log(cards);
+  };
 </script>
 
 <style>
@@ -15,11 +21,16 @@
   {#if page === 'card-list'}
     <!-- <CardList /> -->
     <div>Card list</div>
-  {:else if page === 'new-card'}
-    <NewCard on:back={() => (page = 'lander')} />
+  {:else if page === 'card-editor'}
+    <CardEditor
+      on:cancel={() => (page = 'lander')}
+      on:save={card => {
+        saveCard(card);
+        page = 'lander';
+      }} />
   {:else}
     <Lander
-      on:new-card={() => (page = 'new-card')}
+      on:card-editor={() => (page = 'card-editor')}
       on:card-list={() => (page = 'card-list')} />
   {/if}
 </main>
