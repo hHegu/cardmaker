@@ -50,13 +50,14 @@
     flex-direction: row;
   }
 
-  textarea {
-    width: 20rem;
-    font-size: 0.75rem;
+  .ability-description {
+    flex: 1;
+    padding-left: 0.5rem;
   }
 
-  .ability-description-container {
-    padding-top: 0.5rem;
+  textarea {
+    width: 100%;
+    font-size: 0.75rem;
   }
 
   .ability-header {
@@ -67,7 +68,7 @@
 
 <abilityList>
   {#each abilities as { type, abilityNumber, description }, i}
-    <div class="ability">
+    <div class="ability" style={i >= abilities.length - 1 ? 'margin: 0' : ''}>
       <div class="ability-header">
         <h5>Ability {i + 1}</h5>
         <div>
@@ -125,11 +126,12 @@
             {/each}
           </select>
         </div>
+        <div class="ability-description">
+          <label>Description</label>
+          <textarea rows=3 bind:value={description} />
+        </div>
       </div>
-      <div class="ability-description-container">
-        <label>Description</label>
-        <textarea bind:value={description} />
-      </div>
+
     </div>
   {/each}
 </abilityList>
