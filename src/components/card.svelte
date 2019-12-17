@@ -33,6 +33,7 @@
   };
 
   export let card;
+  export let scale;
 </script>
 
 <style>
@@ -154,7 +155,7 @@
   }
 </style>
 
-<div class="card">
+<div class="card" style={scale ? `transform: scale(${scale})` : ''}>
   <div
     class="card-image"
     style="background-image: url('{card.backgroundImage}');">

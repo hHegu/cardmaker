@@ -44,6 +44,8 @@
     ]
   };
 
+  let scale = 1;
+
   const cardTypes = [
     { id: "creature", text: "Creature" },
     { id: "item", text: "Item" }
@@ -62,6 +64,7 @@
     flex: 1;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
   }
 
   .editor-tools {
@@ -84,7 +87,7 @@
     align-items: center;
   }
 
-  .card-ability-title>button {
+  .card-ability-title > button {
     padding: 0.75rem;
     display: flex;
     justify-content: center;
@@ -119,11 +122,42 @@
     padding: 0.75rem;
     margin: 0;
   }
+
+  .card-view-settings {
+    background: white;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    position: fixed;
+    bottom: 1rem;
+  }
+
+  .card-view-settings > button {
+    padding: 1rem;
+    border: 1px solid black;
+    font-size: 1rem;
+    line-height: 0;
+    text-align: center;
+  }
+  @media print {
+    .editor-tools {
+      display: none;
+    }
+
+    .card-view-settings {
+      display: none;
+    }
+  }
 </style>
 
 <cardEditor>
   <div class="card">
-    <Card {card} />
+    <Card {...{ card, scale }} />
+    <div class="card-view-settings">
+      <button on:click={() => (scale += 0.1)}>+</button>
+      <span>{scale * 100} %</span>
+      <button on:click={() => (scale -= 0.1)}>-</button>
+    </div>
   </div>
   <div class="editor-tools">
     <div>
@@ -178,7 +212,7 @@
             card.abilities.push({});
             card.abilities = card.abilities;
           }}>
-          Add new 
+          Add new &nbsp;
           <Icon icon={faPlus} />
         </button>
       </div>
