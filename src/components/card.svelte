@@ -193,12 +193,12 @@
   <div class="card-footer">
     {#if card.type === 'creature'}
       <span>
-        10
+        {card.xp}
         <b>XP</b>
       </span>
     {/if}
     <span>
-      10
+      {card.gold}
       <Icon icon={faCoins} />
     </span>
   </div>

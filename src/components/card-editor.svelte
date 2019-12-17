@@ -16,6 +16,8 @@
     name: undefined,
     type: "creature",
     backgroundImage: undefined,
+    xp: 0,
+    gold: 0,
     abilities: [
       {
         type: "attack",
@@ -155,7 +157,7 @@
           {#if card.type === 'creature'}
             <div class="form-el">
               <label>Earned XP</label>
-              <input type="text" bind:value={card.experience} />
+              <input type="text" bind:value={card.xp} />
             </div>
           {/if}
           <div class="form-el">
