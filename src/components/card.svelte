@@ -44,7 +44,7 @@
     background: white;
     display: flex;
     flex-direction: column;
-    box-shadow: 7px 7px 8px 0px #4e4e4e;
+    box-shadow: var(--material-shadow)
   }
 
   .card-image {

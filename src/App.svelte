@@ -38,8 +38,8 @@
     page = "card-editor";
   };
 
-  const deleteCard = ({ id }) => {
-    cards.splice(_.findIndex(cards, card => card.id === id), 1);
+  const deleteCard = ({ detail }) => {
+    cards.splice(_.findIndex(cards, card => card.id === detail.id), 1);
     cards = cards;
   };
 
