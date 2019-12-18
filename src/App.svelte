@@ -10,11 +10,11 @@
 
   const saveCard = ({ detail }) => {
     const { id } = detail;
-    const existingCardId = _.find(cards, card => id === card.id);
-    if (existingCardId) {
+    const existingCardId = _.findIndex(cards, card => id === card.id);
+    if (existingCardId >= 0) {
       cards[existingCardId] = detail;
     } else {
-      cards.push(_.clone(detail));
+      cards.push(_.cloneDeep(detail));
     }
     cards = cards;
   };
@@ -34,12 +34,20 @@
   };
 
   const editCard = ({ detail }) => {
-    currentCard = detail;
+    currentCard = _.cloneDeep(detail);
     page = "card-editor";
   };
 
   const deleteCard = ({ id }) => {
-    cards.splice(_.findIndex("id", id), 1);
+    cards.splice(_.findIndex(cards, card => card.id === id), 1);
+    cards = cards;
+  };
+
+  const copyCard = ({ detail }) => {
+    const existingIndex = _.findIndex(cards, card => card.id === detail.id);
+    const newCard = _.cloneDeep(detail);
+    newCard.id = _.uniqueId();
+    cards.splice(existingIndex, 0, newCard);
     cards = cards;
   };
 </script>
@@ -57,7 +65,9 @@
       {cards}
       on:back={() => (page = 'lander')}
       on:new={newCard}
-      on:edit={editCard} />
+      on:edit={editCard}
+      on:copy={copyCard}
+      on:delete={deleteCard} />
   {:else if page === 'card-editor'}
     <CardEditor
       card={currentCard}

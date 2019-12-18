@@ -17,7 +17,7 @@
   ];
 
   const moveArrayElement = ({ array, index, moveUp }) => {
-    const tempArray = _.clone(array);
+    const tempArray = _.cloneDeep(array);
     const nextIndex = index + (moveUp ? 1 : -1);
     let tempValue;
 
