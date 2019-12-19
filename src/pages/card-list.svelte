@@ -60,6 +60,7 @@
   .card-list {
     display: flex;
     flex-wrap: wrap;
+    flex: 1;
   }
   .card-container {
     padding: 0.5rem;

@@ -4,7 +4,7 @@
   import CardEditor from "./pages/card-editor.svelte";
   import CardList from "./pages/card-list.svelte";
 
-  let currentCard = {};
+  let currentCard;
   let page = "card-list";
   const cards = [];
 
@@ -57,25 +57,32 @@
     font-family: Roboto;
     height: 100%;
   }
+  .cardmaker {
+    display: flex;
+    height: 100%;
+  }
 </style>
 
 <main>
-  {#if page === 'card-list'}
-    <CardList
-      {cards}
-      on:back={() => (page = 'lander')}
-      on:new={newCard}
-      on:edit={editCard}
-      on:copy={copyCard}
-      on:delete={deleteCard} />
-  {:else if page === 'card-editor'}
-    <CardEditor
-      card={currentCard}
-      on:cancel={() => (page = 'lander')}
-      on:save={card => {
-        saveCard(card);
-        page = 'card-list';
-      }} />
+  {#if page === 'card-list' || page === 'card-editor'}
+    <div class="cardmaker">
+      <CardList
+        {cards}
+        on:back={() => (page = 'lander')}
+        on:new={newCard}
+        on:edit={editCard}
+        on:copy={copyCard}
+        on:delete={deleteCard} />
+      {#if currentCard}
+        <CardEditor
+          card={currentCard}
+          on:cancel={() => (page = 'card-list')}
+          on:save={card => {
+            saveCard(card);
+            page = 'card-list';
+          }} />
+      {/if}
+    </div>
   {:else}
     <Lander
       on:card-editor={newCard}

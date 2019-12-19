@@ -49,7 +49,7 @@
     ]
   };
 
-  let scale = 1.5;
+  let scale = 1;
   $: scalePercentage = `${_.round(scale * 100)}%`;
 
   const cardTypes = [
@@ -66,13 +66,13 @@
 <style>
   cardEditor {
     display: flex;
-    width: 100%;
+    flex-direction: column;
     height: 100%;
   }
 
-  .card {
+  .card-preview {
     display: flex;
-    flex: 1;
+    padding: 1rem;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -104,19 +104,17 @@
     padding: 1rem;
     display: flex;
     flex: 1;
-    flex-direction: column;
-  }
-
-  .form-row {
-    display: flex;
-    flex: 1;
     flex-direction: row;
   }
 
+  .card-info {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
   .form-el {
-    padding-bottom: 0.5rem;
-    padding-right: 1rem;
-    flex: 1;
+    flex: 0.5;
   }
 
   .ability-list-container {
@@ -130,12 +128,11 @@
     margin: 0;
   }
 
-  .card-zoom-settings {
+  /* .card-zoom-settings {
     background: white;
     margin-top: 1rem;
     padding: 0.5rem 1rem;
     border-radius: 1rem;
-    position: fixed;
     bottom: 1rem;
   }
 
@@ -145,7 +142,7 @@
     font-size: 0.75rem;
     line-height: 0;
     text-align: center;
-  }
+  } */
 
   .card-buttons {
     flex: 1;
@@ -172,24 +169,13 @@
 </style>
 
 <cardEditor>
-  <div class="card">
-    <Card {...{ card, scale }} />
-    <div class="card-zoom-settings">
-      <button class="icon-button" on:click={() => zoom({ zoomIn: true })}>
-        <Icon icon={faPlus} />
-      </button>
-      <span class="zoom-percentage">{scalePercentage}</span>
-      <button class="icon-button" on:click={() => zoom({ zoomIn: false })}>
-        <Icon icon={faMinus} />
-      </button>
-    </div>
-  </div>
+
   <div class="editor-tools">
     <div>
       <h3>Basic info</h3>
       <div class="card-basic">
 
-        <div class="form-row">
+        <div class="card-info">
           <div class="form-el">
             <label>Type</label>
             <select bind:value={card.type}>
@@ -206,9 +192,6 @@
             <label>{card.type === 'item' ? 'Mana cost' : 'Health'}</label>
             <input bind:value={card.cost} />
           </div>
-        </div>
-
-        <div class="form-row">
           <div class="form-el">
             <label>Card image</label>
             <input type="url" bind:value={card.backgroundImage} />
@@ -225,6 +208,19 @@
             </label>
             <input type="text" bind:value={card.gold} />
           </div>
+        </div>
+
+        <div class="card-preview">
+            <Card {...{ card, scale }} />
+            <!-- <div class="card-zoom-settings">
+      <button class="icon-button" on:click={() => zoom({ zoomIn: true })}>
+        <Icon icon={faPlus} />
+      </button>
+      <span class="zoom-percentage">{scalePercentage}</span>
+      <button class="icon-button" on:click={() => zoom({ zoomIn: false })}>
+        <Icon icon={faMinus} />
+      </button>
+    </div> -->
         </div>
 
       </div>
@@ -251,4 +247,5 @@
       <button on:click={() => dispatch('cancel')}>Cancel</button>
     </div>
   </div>
+
 </cardEditor>
