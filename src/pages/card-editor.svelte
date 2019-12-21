@@ -16,51 +16,12 @@
 
   const dispatch = createEventDispatcher();
 
-  export let card = {
-    cost: undefined,
-    name: undefined,
-    type: "creature",
-    backgroundImage: undefined,
-    xp: 0,
-    gold: 0,
-    abilities: [
-      {
-        type: "attack",
-        abilityNumber: 1,
-        description:
-          "Deal <b>5 damage</b> to hero with the lowest health. That player discards a card."
-      },
-      {
-        type: "attack",
-        abilityNumber: 2,
-        description: "Deal <b>3 damage</b> to all heroes."
-      },
-      {
-        type: "defend",
-        abilityNumber: 1,
-        description: "Give 4 block to all allies."
-      },
-      {
-        type: "special",
-        abilityNumber: 1,
-        description:
-          "Destroy an ally with the lowest health. This creature heals the amount of that creatures max hp."
-      }
-    ]
-  };
-
-  let scale = 1;
-  $: scalePercentage = `${_.round(scale * 100)}%`;
+  export let card;
 
   const cardTypes = [
     { id: "creature", text: "Creature" },
     { id: "item", text: "Item" }
   ];
-
-  const zoom = ({ zoomIn = true, amount = 0.1 }) => {
-    const multiplier = zoomIn ? 1 : -1;
-    scale = scale + amount * multiplier;
-  };
 </script>
 
 <style>
@@ -72,109 +33,120 @@
 
   .card-preview {
     display: flex;
-    padding: 1rem;
+    padding-left: 1rem;
     justify-content: center;
     align-items: center;
     flex-direction: column;
   }
 
   .editor-tools {
-    flex: 1;
+    height: 100%;
     background: white;
     display: flex;
     flex-direction: column;
-    max-width: 40rem;
+    width: 30rem;
+    box-shadow: var(--material-shadow);
   }
 
   .card-ability-title {
-    background: var(--primary-color);
+    padding-top: 0.5rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
   }
 
   .card-ability-title > button {
-    padding: 0.75rem;
+    padding: 0.5rem 2rem;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
   .card-basic {
-    padding: 1rem;
+    padding: 1rem 1rem 0.5rem 1rem;
     display: flex;
-    flex: 1;
     flex-direction: row;
   }
 
   .card-info {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
+    flex: 1;
   }
 
   .form-el {
-    flex: 0.5;
+    padding-bottom: 0.5rem;
+  }
+
+  select {
+    width: 100%;
+  }
+
+  input {
+    width: 100%;
   }
 
   .ability-list-container {
     overflow-y: auto;
-    padding: 1rem;
+    flex: 1;
+    padding: 0.5rem 1rem 0.5rem 1rem;
   }
 
-  h3 {
+  .editor-heading {
     background: var(--primary-color);
-    padding: 0.75rem;
-    margin: 0;
-  }
-
-  /* .card-zoom-settings {
-    background: white;
-    margin-top: 1rem;
+    font-weight: 700;
     padding: 0.5rem 1rem;
-    border-radius: 1rem;
-    bottom: 1rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
-
-  .card-zoom-settings > button {
-    padding: 0.5rem;
-    border: 1px solid black;
-    font-size: 0.75rem;
-    line-height: 0;
-    text-align: center;
-  } */
 
   .card-buttons {
-    flex: 1;
     justify-content: space-between;
     display: flex;
     align-items: flex-end;
-    padding: 1rem;
   }
 
   .card-buttons > button {
-    font-size: 1rem;
-    width: 10rem;
+    margin-left: 0.5rem;
+  }
+
+  .new-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .new-card-container > button {
+    border-radius: 50%;
+    padding: 1.5rem;
+    line-height: 0;
+    font-size: 1.5rem;
   }
 
   @media print {
     .editor-tools {
       display: none;
     }
-
-    .card-zoom-settings {
-      display: none;
-    }
   }
 </style>
 
 <cardEditor>
-
   <div class="editor-tools">
-    <div>
-      <h3>Basic info</h3>
+    {#if card}
+      <div class="editor-heading">
+        Card settings
+        <div class="card-buttons">
+          <button on:click={() => dispatch('save', card)}>Save</button>
+          <button on:click={() => dispatch('cancel')}>Cancel</button>
+        </div>
+      </div>
       <div class="card-basic">
-
         <div class="card-info">
           <div class="form-el">
             <label>Type</label>
@@ -211,41 +183,30 @@
         </div>
 
         <div class="card-preview">
-            <Card {...{ card, scale }} />
-            <!-- <div class="card-zoom-settings">
-      <button class="icon-button" on:click={() => zoom({ zoomIn: true })}>
-        <Icon icon={faPlus} />
-      </button>
-      <span class="zoom-percentage">{scalePercentage}</span>
-      <button class="icon-button" on:click={() => zoom({ zoomIn: false })}>
-        <Icon icon={faMinus} />
-      </button>
-    </div> -->
+          <Card {card} />
         </div>
-
       </div>
-    </div>
-    <div class="card-abilities">
-      <div class="card-ability-title">
-        <h3>Abilities</h3>
-        <button
-          class="icon-button"
-          on:click={() => {
-            card.abilities.push({});
-            card.abilities = card.abilities;
-          }}>
-          Add new &nbsp;
+      <div class="ability-list-container">
+        <AbilityList bind:abilities={card.abilities} />
+        <div class="card-ability-title">
+          <button
+            class="icon-button"
+            on:click={() => {
+              card.abilities.push({});
+              card.abilities = card.abilities;
+            }}>
+            Add ability &nbsp;
+            <Icon icon={faPlus} />
+          </button>
+        </div>
+      </div>
+    {:else}
+      <div class="new-card-container">
+        <p>Add new card</p>
+        <button on:click={() => dispatch('new')}>
           <Icon icon={faPlus} />
         </button>
       </div>
-    </div>
-    <div class="ability-list-container">
-      <AbilityList bind:abilities={card.abilities} />
-    </div>
-    <div class="card-buttons">
-      <button on:click={() => dispatch('save', card)}>Save</button>
-      <button on:click={() => dispatch('cancel')}>Cancel</button>
-    </div>
+    {/if}
   </div>
-
 </cardEditor>

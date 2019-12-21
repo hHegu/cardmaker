@@ -5,7 +5,7 @@
   import CardList from "./pages/card-list.svelte";
 
   let currentCard;
-  let page = "card-list";
+  let page = "card-editor";
   const cards = [];
 
   const saveCard = ({ detail }) => {
@@ -17,6 +17,7 @@
       cards.push(_.cloneDeep(detail));
     }
     cards = cards;
+    closeCardEditor();
   };
 
   const newCard = () => {
@@ -30,12 +31,14 @@
       gold: 0,
       abilities: []
     };
-    page = "card-editor";
+  };
+
+  const closeCardEditor = () => {
+    currentCard = undefined;
   };
 
   const editCard = ({ detail }) => {
     currentCard = _.cloneDeep(detail);
-    page = "card-editor";
   };
 
   const deleteCard = ({ detail }) => {
@@ -64,28 +67,26 @@
 </style>
 
 <main>
-  {#if page === 'card-list' || page === 'card-editor'}
+  {#if page === 'card-editor'}
     <div class="cardmaker">
+      <CardEditor
+        card={currentCard}
+        on:cancel={closeCardEditor}
+        on:new={newCard}
+        on:save={card => {
+          saveCard(card);
+          page = 'card-editor';
+        }} />
       <CardList
         {cards}
         on:back={() => (page = 'lander')}
-        on:new={newCard}
         on:edit={editCard}
         on:copy={copyCard}
         on:delete={deleteCard} />
-      {#if currentCard}
-        <CardEditor
-          card={currentCard}
-          on:cancel={() => (page = 'card-list')}
-          on:save={card => {
-            saveCard(card);
-            page = 'card-list';
-          }} />
-      {/if}
     </div>
   {:else}
     <Lander
       on:card-editor={newCard}
-      on:card-list={() => (page = 'card-list')} />
+      on:card-list={() => (page = 'card-editor')} />
   {/if}
 </main>

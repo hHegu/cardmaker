@@ -2,6 +2,11 @@
   import _ from "lodash";
   import Card from "../components/card.svelte";
 
+  import Icon from "fa-svelte";
+
+  import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
+  import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
+
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
@@ -46,11 +51,18 @@
     _.reduce(
       cards,
       (result, card) => {
-        if (!result[card.type]) result[card.type] = [];
-        result[card.type].push(card);
+        const category = _.find(
+          result,
+          category => category.categoryName === card.type
+        );
+        if (category) {
+          category.cards.push(card);
+        } else {
+          result.push({ categoryName: card.type, cards: [card] });
+        }
         return result;
       },
-      new Object()
+      []
     );
 
   $: categorizedCards = categorize(cards);
@@ -59,8 +71,9 @@
 <style>
   .card-list {
     display: flex;
-    flex-wrap: wrap;
     flex: 1;
+    flex-direction: column;
+    overflow: auto;
   }
   .card-container {
     padding: 0.5rem;
@@ -75,7 +88,7 @@
   .testing {
     position: fixed;
     bottom: 1rem;
-    right: 1rem;
+    left: 1rem;
   }
   .card-overlay {
     width: 100%;
@@ -94,29 +107,26 @@
     opacity: 1;
   }
 
-  h3 {
-    margin: 0;
-  }
-
-  .card-category-container {
-    padding: 1rem;
-  }
-  .card-category {
-    flex: 1;
-    background: white;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    box-shadow: var(--material-shadow)
+  .category-heading {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0;
   }
 
   .category-title {
-    padding: 0.5rem 1rem;
-    background-color: var(--primary-color);
+    padding: 0.5rem 1rem 0 1rem;
   }
 
   .category-cards {
     display: flex;
     flex-wrap: wrap;
+    padding: 0 0.5rem;
+  }
+
+  .category-cards.collapsed {
+    display: none;
   }
 
   @media print {
@@ -127,32 +137,35 @@
 </style>
 
 <div class="card-list">
-  {#each Object.entries(categorizedCards) as [categoryName, cardsInCategory]}
-    <div class="card-category-container">
-      <div class="card-category">
-        <div class="category-title">
-          <h3>{_.capitalize(categoryName)}s</h3>
-        </div>
-        <div class="category-cards">
-          {#each cardsInCategory as card}
-            <div class="card-container">
-              <div class="card">
-                <Card {card}/>
-                <div class="card-overlay">
-                  <button on:click={() => dispatch('edit', card)}>Edit</button>
-                  <button
-                    on:click={() => dispatch('copy', card)}
-                    style="margin: 0 0.5rem">
-                    Copy
-                  </button>
-                  <button on:click={() => dispatch('delete', card)}>
-                    Delete
-                  </button>
-                </div>
+  {#each categorizedCards as category}
+    <div class="card-category">
+      <div class="category-title">
+        <button
+          class="category-heading"
+          on:click={() => (category.collapsed = !category.collapsed)}>
+          <span>{_.capitalize(category.categoryName)}s</span>
+          <Icon icon={category.collapsed ? faChevronDown : faChevronUp} />
+        </button>
+      </div>
+      <div class={`category-cards ${category.collapsed ? 'collapsed' : ''}`}>
+        {#each category.cards as card}
+          <div class="card-container">
+            <div class="card">
+              <Card {card} />
+              <div class="card-overlay">
+                <button on:click={() => dispatch('edit', card)}>Edit</button>
+                <button
+                  on:click={() => dispatch('copy', card)}
+                  style="margin: 0 0.5rem">
+                  Copy
+                </button>
+                <button on:click={() => dispatch('delete', card)}>
+                  Delete
+                </button>
               </div>
             </div>
-          {/each}
-        </div>
+          </div>
+        {/each}
       </div>
     </div>
   {/each}
@@ -165,6 +178,5 @@
     }}>
     Testing card
   </button>
-  <button on:click={() => dispatch('new')}>New card</button>
   <button on:click={() => dispatch('back')}>Landing page</button>
 </div>
