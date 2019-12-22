@@ -51,7 +51,12 @@
       backgroundImage: undefined,
       xp: 0,
       gold: 0,
-      abilities: []
+      abilities: [],
+      actionCards: {
+        attacks: 0,
+        defends: 0,
+        specials: 0
+      }
     };
   };
 

@@ -8,6 +8,12 @@
   import { faHeart } from "@fortawesome/free-solid-svg-icons/faHeart";
   import { faBoxOpen } from "@fortawesome/free-solid-svg-icons/faBoxOpen";
   import { faDragon } from "@fortawesome/free-solid-svg-icons/faDragon";
+  import { faCircle } from "@fortawesome/free-solid-svg-icons/faCircle";
+  import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
+
+  import OneStack from "../icons/oneStack.svelte";
+  import TwoStack from "../icons/twoStack.svelte";
+  import ThreeStack from "../icons/threeStack.svelte";
 
   const ABILITY_CONFIG = {
     attack: {
@@ -32,6 +38,19 @@
     item: { type: faBoxOpen, cost: faBolt }
   };
 
+  const getCardAmountIcon = amount => {
+    switch (Number(amount)) {
+      case 1:
+        return OneStack;
+      case 2:
+        return TwoStack;
+      case 3:
+        return ThreeStack;
+      default:
+        return undefined;
+    }
+  };
+
   export let card;
 </script>
 
@@ -43,7 +62,7 @@
     background: white;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--material-shadow)
+    box-shadow: var(--material-shadow);
   }
 
   .card-image {
@@ -143,12 +162,13 @@
   .card-footer {
     height: 3mm;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     padding: 1mm;
+    line-height: 0;
   }
 
-  .card-footer > span {
+  .footer-right > span {
     height: 100%;
     padding-left: 1mm;
   }
@@ -188,7 +208,9 @@
               class="ability-icon-container"
               style="background-color: {ABILITY_CONFIG[type].color}">
               <img src={ABILITY_CONFIG[type].icon} alt="attack" />
-              <span>{abilityNumber}</span>
+              {#if abilityNumber}
+                <span style="font-weight: 500">{abilityNumber}</span>
+              {/if}
             </span>
           </p>
         {/if}
@@ -199,15 +221,30 @@
     {/each}
   </div>
   <div class="card-footer">
-    {#if card.type === 'creature'}
+    <div class="footer-left">
+      {#if card.type === 'creature'}
+        <svelte:component
+          this={getCardAmountIcon(card.actionCards.attacks)}
+          color={ABILITY_CONFIG.attack.color} />
+        <svelte:component
+          this={getCardAmountIcon(card.actionCards.defends)}
+          color={ABILITY_CONFIG.defend.color} />
+        <svelte:component
+          this={getCardAmountIcon(card.actionCards.specials)}
+          color={ABILITY_CONFIG.special.color} />
+      {/if}
+    </div>
+    <div class="footer-right">
+      {#if card.type === 'creature'}
+        <span>
+          {card.xp}
+          <b>XP</b>
+        </span>
+      {/if}
       <span>
-        {card.xp}
-        <b>XP</b>
+        {card.gold}
+        <Icon icon={faCoins} />
       </span>
-    {/if}
-    <span>
-      {card.gold}
-      <Icon icon={faCoins} />
-    </span>
+    </div>
   </div>
 </div>

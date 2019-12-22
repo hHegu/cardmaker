@@ -63,6 +63,11 @@
     align-items: center;
   }
 
+  .card-ability-title > button:hover {
+    background: #dddddd;
+    color: black;
+  }
+
   .card-basic {
     padding: 1rem 1rem 0.5rem 1rem;
     display: flex;
@@ -80,7 +85,20 @@
     padding-bottom: 0.5rem;
   }
 
+  .action-cards {
+    display: flex;
+    flex-direction: row;
+  }
+  .action-cards > div {
+    flex: 1;
+  }
+
+  label {
+    font-size: 0.75rem;
+  }
+
   select {
+    margin-top: 3px;
     width: 100%;
   }
 
@@ -184,6 +202,34 @@
             </label>
             <input type="text" bind:value={card.gold} />
           </div>
+          {#if card.type === 'creature'}
+            <div class="form-el action-cards">
+              <div>
+                <label>Attacks</label>
+                <select bind:value={card.actionCards.attacks}>
+                  {#each [0, 1, 2, 3] as n}
+                    <option value={n}>{n}</option>
+                  {/each}
+                </select>
+              </div>
+              <div>
+                <label>Defends</label>
+                <select bind:value={card.actionCards.defends}>
+                  {#each [0, 1, 2, 3] as n}
+                    <option value={n}>{n}</option>
+                  {/each}
+                </select>
+              </div>
+              <div>
+                <label>Specials</label>
+                <select bind:value={card.actionCards.specials}>
+                  {#each [0, 1, 2, 3] as n}
+                    <option value={n}>{n}</option>
+                  {/each}
+                </select>
+              </div>
+            </div>
+          {/if}
         </div>
 
         <div class="card-preview">

@@ -39,7 +39,6 @@ label {
   display: block;
 }
 
-input,
 button,
 select,
 textarea {
@@ -51,6 +50,16 @@ textarea {
   border-radius: 4px;
   padding: 0.2rem;
   font-size: 0.8rem;
+}
+
+input {
+  font-family: inherit;
+  font-size: inherit;
+  margin: 0;
+  padding: 0.2rem;
+  font-size: 0.8rem;
+  border: none;
+  border-bottom: 1px solid #ccc;
 }
 
 input:disabled {
@@ -83,14 +92,23 @@ button {
   transition: 0.1s;
 }
 
-.button-primary {
-  background: var(--primary-color)
+button {
+  background: var(--light-color);
+  box-shadow: var(--material-shadow);
 }
 
 button:not(:disabled):active {
   font-weight: 500;
-  background-color: var(--light-color);
+  background-color: var(--dark-color);
+  color: white;
   box-shadow: none;
+}
+
+button:not(:disabled):not(:active):hover {
+  font-weight: 500;
+  background-color: var(--dark-color);
+  color: white;
+  /* box-shadow: none; */
 }
 
 .icon-button {

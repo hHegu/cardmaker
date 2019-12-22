@@ -42,7 +42,12 @@
         description:
           "Destroy an ally with the lowest health. This creature heals the amount of that creatures max hp."
       }
-    ]
+    ],
+    actionCards: {
+      attacks: 0,
+      defends: 0,
+      specials: 0
+    }
   });
 
   export let cards = [];
@@ -89,7 +94,7 @@
   .testing {
     position: fixed;
     bottom: 1rem;
-    left: 1rem;
+    right: 1rem;
   }
   .card-overlay {
     width: 100%;
