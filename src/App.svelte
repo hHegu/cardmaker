@@ -1,12 +1,33 @@
 <script>
+  import { onMount } from "svelte";
   import _ from "lodash";
   import Lander from "./pages/lander.svelte";
   import CardEditor from "./pages/card-editor.svelte";
   import CardList from "./pages/card-list.svelte";
 
+  const LOCAL_STORAGE_NAME = "";
+
   let currentCard;
   let page = "card-editor";
-  const cards = [];
+  let cards = [];
+
+  onMount(async () => {
+    cards = loadCardsFromStorage();
+  });
+
+  const loadCardsFromStorage = () => {
+    const savedCards = localStorage.getItem(LOCAL_STORAGE_NAME);
+    try {
+      const cardsJSON = JSON.parse(savedCards);
+      return cardsJSON || [];
+    } catch {
+      return [];
+    }
+  };
+
+  const saveCardsToStorage = () => {
+    localStorage.setItem(LOCAL_STORAGE_NAME, JSON.stringify(cards));
+  };
 
   const saveCard = ({ detail }) => {
     const { id } = detail;
@@ -18,6 +39,7 @@
     }
     cards = cards;
     closeCardEditor();
+    saveCardsToStorage();
   };
 
   const newCard = () => {
@@ -44,6 +66,7 @@
   const deleteCard = ({ detail }) => {
     cards.splice(_.findIndex(cards, card => card.id === detail.id), 1);
     cards = cards;
+    saveCardsToStorage();
   };
 
   const copyCard = ({ detail }) => {
@@ -52,6 +75,7 @@
     newCard.id = _.uniqueId();
     cards.splice(existingIndex, 0, newCard);
     cards = cards;
+    saveCardsToStorage();
   };
 </script>
 

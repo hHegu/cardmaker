@@ -75,6 +75,7 @@
     flex-direction: column;
     overflow: auto;
   }
+
   .card-container {
     padding: 0.5rem;
   }

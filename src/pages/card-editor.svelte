@@ -129,6 +129,10 @@
     font-size: 1.5rem;
   }
 
+  .new-card-container > p {
+    font-weight: 500;
+  }
+
   @media print {
     .editor-tools {
       display: none;
