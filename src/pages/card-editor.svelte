@@ -14,13 +14,15 @@
   import Card from "../components/card.svelte";
   import AbilityList from "../components/ability-list.svelte";
 
-  const dispatch = createEventDispatcher();
+  import * as firebase from 'firebase';
 
+  const dispatch = createEventDispatcher();
   export let card;
 
   const cardTypes = [
     { id: "creature", text: "Creature" },
-    { id: "item", text: "Item" }
+    { id: "item", text: "Item" },
+    { id: "character", text: "Character" }
   ];
 </script>
 

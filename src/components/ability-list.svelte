@@ -119,7 +119,7 @@
         <div style="padding-left: 0.5rem">
           <label>Nmbr</label>
           <select bind:value={abilityNumber}>
-            {#each [{ label: 'None', value: undefined }, { value: 1 }, { value: 2 }, { value: 3 }] as {label, value}}
+            {#each [{ label: 'None', value: null }, { value: 1 }, { value: 2 }, { value: 3 }] as {label, value}}
               <option {value}>{label || value}</option>
             {/each}
           </select>

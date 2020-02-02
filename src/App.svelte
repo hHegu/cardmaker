@@ -4,6 +4,8 @@
   import Lander from "./pages/lander.svelte";
   import CardEditor from "./pages/card-editor.svelte";
   import CardList from "./pages/card-list.svelte";
+  import firebase from 'firebase';
+  import uuidv1 from 'uuid/v1';
 
   const LOCAL_STORAGE_NAME = "";
 
@@ -11,8 +13,27 @@
   let page = "card-editor";
   let cards = [];
 
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: undefined,
+    authDomain: undefined,
+    databaseURL: undefined,
+    projectId: undefined,
+    storageBucket: undefined,
+    messagingSenderId: undefined,
+    appId: undefined
+  }
+
   onMount(async () => {
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig)
     cards = loadCardsFromStorage();
+
+    firebase.auth().signInAnonymously().catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+    });
   });
 
   const loadCardsFromStorage = () => {
@@ -25,10 +46,6 @@
     }
   };
 
-  const saveCardsToStorage = () => {
-    localStorage.setItem(LOCAL_STORAGE_NAME, JSON.stringify(cards));
-  };
-
   const saveCard = ({ detail }) => {
     const { id } = detail;
     const existingCardId = _.findIndex(cards, card => id === card.id);
@@ -37,18 +54,21 @@
     } else {
       cards.push(_.cloneDeep(detail));
     }
+
     cards = cards;
+    firebase.database().ref('cards/' + id).set(detail)
+
     closeCardEditor();
-    saveCardsToStorage();
+    // saveCardsToStorage();
   };
 
   const newCard = () => {
     currentCard = {
-      id: _.uniqueId(),
-      cost: undefined,
-      name: undefined,
+      id: uuidv1(),
+      cost: null,
+      name: null,
       type: "creature",
-      backgroundImage: undefined,
+      backgroundImage: null,
       xp: 0,
       gold: 0,
       abilities: [],

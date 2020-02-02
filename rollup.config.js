@@ -1,7 +1,7 @@
-import svelte from 'rollup-plugin-svelte';
-import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
+import resolve from 'rollup-plugin-node-resolve';
+import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -34,7 +34,11 @@ export default {
 			browser: true,
 			dedupe: importee => importee === 'svelte' || importee.startsWith('svelte/')
 		}),
-		commonjs(),
+		commonjs({
+            namedExports: {
+                'node_modules/idb/build/idb.js': ['openDb', 'deleteDb']
+            }
+        }),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated

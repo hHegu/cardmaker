@@ -10,6 +10,7 @@
   import { faDragon } from "@fortawesome/free-solid-svg-icons/faDragon";
   import { faCircle } from "@fortawesome/free-solid-svg-icons/faCircle";
   import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
+  import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
 
   import OneStack from "../icons/oneStack.svelte";
   import TwoStack from "../icons/twoStack.svelte";
@@ -35,7 +36,8 @@
 
   const CARD_ICONS = {
     creature: { type: faDragon, cost: faHeart },
-    item: { type: faBoxOpen, cost: faBolt }
+    item: { type: faBoxOpen, cost: faBolt },
+    character: { type: faUser, cost: faHeart }
   };
 
   const getCardAmountIcon = amount => {
@@ -91,15 +93,15 @@
 
   .card-bottom-left {
     padding: 2mm;
-    border-radius: 0 1rem 0 0;
+    border-radius: 0 0.5rem 0 0;
   }
   .card-bottom-right {
     padding: 2mm;
-    border-radius: 1rem 0 0 0;
+    border-radius: 0.5rem 0 0 0;
   }
   .card-top-left {
     padding: 2mm;
-    border-radius: 0 0 1rem 0;
+    border-radius: 0 0 0.5rem 0;
   }
 
   .card-type {
