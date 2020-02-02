@@ -1,49 +1,72 @@
 <script>
   import { onMount } from "svelte";
   import _ from "lodash";
+  import firebase from "firebase";
+  import uuidv1 from "uuid/v1";
   import Lander from "./pages/lander.svelte";
   import CardEditor from "./pages/card-editor.svelte";
   import CardList from "./pages/card-list.svelte";
-  import firebase from 'firebase';
-  import uuidv1 from 'uuid/v1';
-
-  const LOCAL_STORAGE_NAME = "";
+  import firebaseConfig from "./config/firebase-config.json";
 
   let currentCard;
   let page = "card-editor";
   let cards = [];
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: undefined,
-    authDomain: undefined,
-    databaseURL: undefined,
-    projectId: undefined,
-    storageBucket: undefined,
-    messagingSenderId: undefined,
-    appId: undefined
-  }
-
   onMount(async () => {
     // Initialize Firebase
-    firebase.initializeApp(firebaseConfig)
-    cards = loadCardsFromStorage();
+    firebase.initializeApp(firebaseConfig);
+    firebase
+      .auth()
+      .signInAnonymously()
+      .catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+      });
 
-    firebase.auth().signInAnonymously().catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
+    const addEmptyArraysForCards = cards => {
+      _.forEach(cards, card => {
+        card.abilities = card.abilities || [];
+        card.actionCards = card.actionCards || [];
+      });
+    };
+
+    loadCardsFromFirebase().then(loadedCards => {
+      cards = _.toArray(loadedCards);
+      console.log(loadedCards);
+      addEmptyArraysForCards(cards);
+      cards = cards;
+      console.log(cards);
     });
   });
 
-  const loadCardsFromStorage = () => {
-    const savedCards = localStorage.getItem(LOCAL_STORAGE_NAME);
-    try {
-      const cardsJSON = JSON.parse(savedCards);
-      return cardsJSON || [];
-    } catch {
-      return [];
-    }
+  const loadCardsFromFirebase = async () => {
+    return firebase
+      .database()
+      .ref("cards/")
+      .once("value")
+      .then(snapshot => snapshot.val() || []);
+  };
+
+  const saveCardToFirebase = card =>
+    firebase
+      .database()
+      .ref("cards/" + card.id)
+      .set(card);
+
+  const removeCardFromFirebase = ({ id }) =>
+    firebase
+      .database()
+      .ref("cards/" + id)
+      .remove();
+
+  const saveImageToFirebase = (card, imageFile) => {
+    // Create a root reference
+    var storageRef = firebase.storage().ref();
+
+    // Create a reference to 'images/mountains.jpg'
+    var mountainImagesRef = storageRef.child(`images/${card.id}.jpg`);
+    storageRef.put(imageFile)
   };
 
   const saveCard = ({ detail }) => {
@@ -56,10 +79,9 @@
     }
 
     cards = cards;
-    firebase.database().ref('cards/' + id).set(detail)
-
+    console.log(detail);
+    saveCardToFirebase(detail);
     closeCardEditor();
-    // saveCardsToStorage();
   };
 
   const newCard = () => {
@@ -90,17 +112,17 @@
 
   const deleteCard = ({ detail }) => {
     cards.splice(_.findIndex(cards, card => card.id === detail.id), 1);
+    removeCardFromFirebase(detail);
     cards = cards;
-    saveCardsToStorage();
   };
 
   const copyCard = ({ detail }) => {
     const existingIndex = _.findIndex(cards, card => card.id === detail.id);
     const newCard = _.cloneDeep(detail);
-    newCard.id = _.uniqueId();
+    newCard.id = uuidv1();
+    saveCardToFirebase(newCard);
     cards.splice(existingIndex, 0, newCard);
     cards = cards;
-    saveCardsToStorage();
   };
 </script>
 
@@ -120,6 +142,7 @@
     <div class="cardmaker">
       <CardEditor
         card={currentCard}
+        on:saveImage={saveImageToFirebase}
         on:cancel={closeCardEditor}
         on:new={newCard}
         on:save={card => {

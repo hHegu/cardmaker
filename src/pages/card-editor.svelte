@@ -190,7 +190,7 @@
           </div>
           <div class="form-el">
             <label>Card image</label>
-            <input type="url" bind:value={card.backgroundImage} />
+            <input type="file" accept="image/png, image/jpeg" on:change={joo => console.log(joo)} bind:value={card.backgroundImage} />
           </div>
           {#if card.type === 'creature'}
             <div class="form-el">

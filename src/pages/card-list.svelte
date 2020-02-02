@@ -1,5 +1,7 @@
 <script>
   import _ from "lodash";
+  import uuidv1 from "uuid/v1";
+
   import Card from "../components/card.svelte";
 
   import Icon from "fa-svelte";
@@ -12,9 +14,9 @@
   const dispatch = createEventDispatcher();
 
   let newTestingCard = () => ({
-    id: _.uniqueId(),
-    cost: undefined,
-    name: undefined,
+    id: _.uuidv1(),
+    cost: null,
+    name: null,
     type: "creature",
     backgroundImage: "https://i.redd.it/px75th6i2nn11.jpg",
     xp: 0,

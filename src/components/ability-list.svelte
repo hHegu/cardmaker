@@ -10,7 +10,7 @@
   import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 
   const abilityTypes = [
-    { id: undefined, text: "None" },
+    { id: null, text: "None" },
     { id: "attack", text: "Attack" },
     { id: "defend", text: "Defend" },
     { id: "special", text: "Special" }
