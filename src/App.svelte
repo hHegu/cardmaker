@@ -198,6 +198,5 @@
       on:card-editor={newCard}
       on:card-list={() => (page = 'card-editor')} />
   {/if}
-  <button on:click={() => showNotification({ message: 'Tere' })}>joo</button>
   <Notifications {notifications} />
 </main>
