@@ -4,7 +4,7 @@
 
   import Card from "../components/card.svelte";
 
-  import Icon from "fa-svelte";
+  import Icon from "svelte-awesome";
 
   import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
   import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
@@ -152,7 +152,7 @@
           class="category-heading"
           on:click={() => (category.collapsed = !category.collapsed)}>
           <span>{_.capitalize(category.categoryName)}s</span>
-          <Icon icon={category.collapsed ? faChevronDown : faChevronUp} />
+          <Icon data={category.collapsed ? faChevronDown : faChevronUp} />
         </button>
       </div>
       <div class={`category-cards ${category.collapsed ? 'collapsed' : ''}`}>

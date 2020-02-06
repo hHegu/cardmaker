@@ -3,6 +3,9 @@
   import _ from "lodash";
   import firebase from "firebase";
   import uuidv1 from "uuid/v1";
+  import Icon from "svelte-awesome";
+  import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
+
   import Lander from "./pages/lander.svelte";
   import CardEditor from "./pages/card-editor.svelte";
   import CardList from "./pages/card-list.svelte";
@@ -11,6 +14,7 @@
   let currentCard;
   let page = "card-editor";
   let cards = [];
+  let loading = true;
 
   onMount(async () => {
     // Initialize Firebase
@@ -33,10 +37,9 @@
 
     loadCardsFromFirebase().then(loadedCards => {
       cards = _.toArray(loadedCards);
-      console.log(loadedCards);
       addEmptyArraysForCards(cards);
       cards = cards;
-      console.log(cards);
+      loading = false;
     });
   });
 
@@ -66,7 +69,7 @@
 
     // Create a reference to 'images/mountains.jpg'
     var mountainImagesRef = storageRef.child(`images/${card.id}.jpg`);
-    storageRef.put(imageFile)
+    storageRef.put(imageFile);
   };
 
   const saveCard = ({ detail }) => {
@@ -79,7 +82,6 @@
     }
 
     cards = cards;
-    console.log(detail);
     saveCardToFirebase(detail);
     closeCardEditor();
   };
@@ -135,6 +137,13 @@
     display: flex;
     height: 100%;
   }
+
+  .spinner {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+  }
 </style>
 
 <main>
@@ -149,12 +158,19 @@
           saveCard(card);
           page = 'card-editor';
         }} />
-      <CardList
-        {cards}
-        on:back={() => (page = 'lander')}
-        on:edit={editCard}
-        on:copy={copyCard}
-        on:delete={deleteCard} />
+      {#if loading}
+        <div class="spinner">
+          <Icon data={faSpinner} spin scale="3" />
+        </div>
+      {:else}
+        <CardList
+          {cards}
+          on:back={() => (page = 'lander')}
+          on:edit={editCard}
+          on:copy={copyCard}
+          on:delete={deleteCard} />
+      {/if}
+
     </div>
   {:else}
     <Lander

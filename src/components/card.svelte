@@ -1,7 +1,7 @@
 <script>
   import _ from "lodash";
 
-  import Icon from "fa-svelte";
+  import Icon from "svelte-awesome";
 
   import { faBolt } from "@fortawesome/free-solid-svg-icons/faBolt";
   import { faCoins } from "@fortawesome/free-solid-svg-icons/faCoins";
@@ -102,6 +102,9 @@
   .card-top-left {
     padding: 2mm;
     border-radius: 0 0 0.5rem 0;
+    display: flex;
+    align-self: center;
+    justify-content: center;
   }
 
   .card-type {
@@ -190,14 +193,14 @@
     style="background-image: url('{card.backgroundImage}');">
     <div class="image-info-group">
       <div class="card-top-left">
-        {card.cost || '0'}
-        <Icon icon={CARD_ICONS[card.type].cost} />
+        <span style="padding-right: 1mm">{card.cost || '0'}</span>
+        <Icon data={CARD_ICONS[card.type].cost} scale="0.7" />
       </div>
     </div>
     <div class="image-info-group">
       <div class="card-bottom-left">{card.name || 'Card name here'}</div>
       <div class="card-bottom-right card-type">
-        <Icon icon={CARD_ICONS[card.type].type} />
+        <Icon data={CARD_ICONS[card.type].type} />
       </div>
     </div>
   </div>
@@ -245,7 +248,7 @@
       {/if}
       <span>
         {card.gold}
-        <Icon icon={faCoins} />
+        <Icon data={faCoins} scale="0.6" />
       </span>
     </div>
   </div>

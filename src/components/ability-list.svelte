@@ -2,7 +2,7 @@
   export let abilities;
   import _ from "lodash";
 
-  import Icon from "fa-svelte";
+  import Icon from "svelte-awesome";
 
   import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
   import { faArrowUp } from "@fortawesome/free-solid-svg-icons/faArrowUp";
@@ -77,7 +77,7 @@
                   moveUp: true
                 });
               }}>
-              <Icon icon={faArrowDown} />
+              <Icon data={faArrowDown} />
             </button>
           {/if}
 
@@ -93,7 +93,7 @@
                   });
                 }
               }}>
-              <Icon icon={faArrowUp} />
+              <Icon data={faArrowUp} />
             </button>
           {/if}
 
@@ -103,7 +103,7 @@
               abilities.splice(i, 1);
               abilities = abilities;
             }}>
-            <Icon icon={faTimes} />
+            <Icon data={faTimes} />
           </button>
         </div>
       </div>

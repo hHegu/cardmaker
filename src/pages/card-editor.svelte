@@ -3,13 +3,8 @@
 
   import { createEventDispatcher } from "svelte";
 
-  import Icon from "fa-svelte";
-
-  import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
-  import { faArrowUp } from "@fortawesome/free-solid-svg-icons/faArrowUp";
-  import { faArrowDown } from "@fortawesome/free-solid-svg-icons/faArrowDown";
+  import Icon from "svelte-awesome";
   import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
-  import { faMinus } from "@fortawesome/free-solid-svg-icons/faMinus";
 
   import Card from "../components/card.svelte";
   import AbilityList from "../components/ability-list.svelte";
@@ -248,7 +243,7 @@
               card.abilities = card.abilities;
             }}>
             Add ability &nbsp;
-            <Icon icon={faPlus} />
+            <Icon data={faPlus} />
           </button>
         </div>
       </div>
@@ -256,7 +251,7 @@
       <div class="new-card-container">
         <p>Add new card</p>
         <button on:click={() => dispatch('new')}>
-          <Icon icon={faPlus} />
+          <Icon data={faPlus} />
         </button>
       </div>
     {/if}
