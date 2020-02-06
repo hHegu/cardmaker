@@ -11,6 +11,7 @@
   import { faCircle } from "@fortawesome/free-solid-svg-icons/faCircle";
   import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
   import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
+  import { faStar } from "@fortawesome/free-solid-svg-icons/faStar";
 
   import OneStack from "../icons/oneStack.svelte";
   import TwoStack from "../icons/twoStack.svelte";
@@ -37,6 +38,7 @@
   const CARD_ICONS = {
     creature: { type: faDragon, cost: faHeart },
     item: { type: faBoxOpen, cost: faBolt },
+    skill: { type: faStar, cost: faBolt },
     character: { type: faUser, cost: faHeart }
   };
 
@@ -192,10 +194,12 @@
     class="card-image"
     style="background-image: url('{card.backgroundImage}');">
     <div class="image-info-group">
-      <div class="card-top-left">
-        <span style="padding-right: 1mm">{card.cost || '0'}</span>
-        <Icon data={CARD_ICONS[card.type].cost} scale="0.7" />
-      </div>
+      {#if card.type !== 'item'}
+        <div class="card-top-left">
+          <span style="padding-right: 1mm">{card.cost || '0'}</span>
+          <Icon data={CARD_ICONS[card.type].cost} scale="0.7" />
+        </div>
+      {/if}
     </div>
     <div class="image-info-group">
       <div class="card-bottom-left">{card.name || 'Card name here'}</div>

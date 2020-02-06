@@ -9,15 +9,16 @@
   import Card from "../components/card.svelte";
   import AbilityList from "../components/ability-list.svelte";
 
-  import * as firebase from 'firebase';
+  import * as firebase from "firebase";
 
   const dispatch = createEventDispatcher();
   export let card;
 
   const cardTypes = [
     { id: "creature", text: "Creature" },
+    { id: "character", text: "Character" },
     { id: "item", text: "Item" },
-    { id: "character", text: "Character" }
+    { id: "skill", text: "Skill" }
   ];
 </script>
 
@@ -180,12 +181,18 @@
             <input bind:value={card.name} />
           </div>
           <div class="form-el">
-            <label>{card.type === 'item' ? 'Mana cost' : 'Health'}</label>
-            <input bind:value={card.cost} />
+            {#if card.type !== 'item'}
+              <label>{card.type === 'skill' ? 'Mana cost' : 'Health'}</label>
+              <input bind:value={card.cost} />
+            {/if}
           </div>
           <div class="form-el">
             <label>Card image</label>
-            <input type="file" accept="image/png, image/jpeg" on:change={joo => console.log(joo)} bind:value={card.backgroundImage} />
+            <input
+              type="file"
+              accept="image/png, image/jpeg"
+              on:change={joo => console.log(joo)}
+              bind:value={card.backgroundImage} />
           </div>
           {#if card.type === 'creature'}
             <div class="form-el">
