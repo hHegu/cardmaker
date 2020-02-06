@@ -9,12 +9,14 @@
   import Lander from "./pages/lander.svelte";
   import CardEditor from "./pages/card-editor.svelte";
   import CardList from "./pages/card-list.svelte";
+  import Notifications from "./components/notifications.svelte";
   import firebaseConfig from "./config/firebase-config.json";
 
   let currentCard;
   let page = "card-editor";
   let cards = [];
   let loading = true;
+  let notifications = [];
 
   onMount(async () => {
     // Initialize Firebase
@@ -35,12 +37,14 @@
       });
     };
 
-    loadCardsFromFirebase().then(loadedCards => {
-      cards = _.toArray(loadedCards);
-      addEmptyArraysForCards(cards);
-      cards = cards;
-      loading = false;
-    });
+    loadCardsFromFirebase()
+      .then(loadedCards => {
+        cards = _.toArray(loadedCards);
+        addEmptyArraysForCards(cards);
+        cards = cards;
+        loading = false;
+      })
+      .catch(e => showNotification({ message: e.message, isError: true }));
   });
 
   const loadCardsFromFirebase = async () => {
@@ -55,13 +59,21 @@
     firebase
       .database()
       .ref("cards/" + card.id)
-      .set(card);
+      .set(card, e =>
+        showNotification({
+          message: e ? e.message : "Save succesful",
+          isError: e
+        })
+      );
 
   const removeCardFromFirebase = ({ id }) =>
     firebase
       .database()
       .ref("cards/" + id)
-      .remove();
+      .remove(e => showNotification({
+          message: e ? e.message : "Remove succesful",
+          isError: e
+        }));
 
   const saveImageToFirebase = (card, imageFile) => {
     // Create a root reference
@@ -126,6 +138,15 @@
     cards.splice(existingIndex, 0, newCard);
     cards = cards;
   };
+
+  const showNotification = notification => {
+    const id = uuidv1();
+    notifications.push({ id, ...notification });
+    notifications = notifications;
+    setTimeout(() => {
+      notifications = _.filter(notifications, no => no.id !== id);
+    }, 3000);
+  };
 </script>
 
 <style>
@@ -177,4 +198,6 @@
       on:card-editor={newCard}
       on:card-list={() => (page = 'card-editor')} />
   {/if}
+  <button on:click={() => showNotification({ message: 'Tere' })}>joo</button>
+  <Notifications {notifications} />
 </main>
