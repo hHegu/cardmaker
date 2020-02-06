@@ -27,6 +27,13 @@
     { id: "blue", text: "Blue" },
     { id: "yellow", text: "Yellow" }
   ];
+
+  const prepareFileForSending = (files) => {
+    const file = _.get(files, 'target.files.0')
+    if (file) {
+      dispatch('saveImage', {card, file})
+    }
+  };
 </script>
 
 <style>
@@ -198,8 +205,7 @@
             <input
               type="file"
               accept="image/png, image/jpeg"
-              on:change={joo => console.log(joo)}
-              bind:value={card.backgroundImage} />
+              on:change={prepareFileForSending} />
           </div>
           {#if card.type === 'creature'}
             <div class="form-el">

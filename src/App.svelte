@@ -70,18 +70,38 @@
     firebase
       .database()
       .ref("cards/" + id)
-      .remove(e => showNotification({
+      .remove(e =>
+        showNotification({
           message: e ? e.message : "Remove succesful",
           isError: e
-        }));
+        })
+      );
 
-  const saveImageToFirebase = (card, imageFile) => {
-    // Create a root reference
-    var storageRef = firebase.storage().ref();
+  const saveImageToFirebase = ({ detail }) => {
+    const loadingNotificationId = showNotification(
+      {
+        message: "Saving file to firestorage..."
+      },
+      false
+    );
 
-    // Create a reference to 'images/mountains.jpg'
-    var mountainImagesRef = storageRef.child(`images/${card.id}.jpg`);
-    storageRef.put(imageFile);
+    const { card, file } = detail;
+    const storageRef = firebase.storage().ref();
+    const imageRef = storageRef.child(`images/${card.id}`);
+    const imagePromise = imageRef.put(file);
+
+    imagePromise.then(async snapshot => {
+      const url = await snapshot.ref.getDownloadURL();
+      currentCard.backgroundImage = url;
+      currentCard = currentCard;
+      removeNotification(loadingNotificationId);
+      showNotification({ message: "Image saved successfully" });
+    });
+
+    imagePromise.catch(e => {
+      removeNotification(loadingNotificationId);
+      showNotification({ message: e.message, isError: true });
+    });
   };
 
   const saveCard = ({ detail }) => {
@@ -139,13 +159,24 @@
     cards = cards;
   };
 
-  const showNotification = notification => {
+  const showNotification = (notification, hasTimeout = true) => {
     const id = uuidv1();
     notifications.push({ id, ...notification });
     notifications = notifications;
-    setTimeout(() => {
-      notifications = _.filter(notifications, no => no.id !== id);
-    }, 3000);
+
+    if (hasTimeout) {
+      setTimeout(() => {
+        notifications = _.filter(notifications, no => no.id !== id);
+      }, 3000);
+    }
+    return id;
+  };
+
+  const removeNotification = id => {
+    notifications = notifications = _.filter(
+      notifications,
+      notification => notification.id !== id
+    );
   };
 </script>
 
