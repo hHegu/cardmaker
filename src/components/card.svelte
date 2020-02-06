@@ -35,6 +35,12 @@
     }
   };
 
+  const CARD_COLORS = {
+    red: "#f44336",
+    blue: "#64b5f6",
+    yellow: "#fbc02d",
+  }
+
   const CARD_ICONS = {
     creature: { type: faDragon, cost: faHeart },
     item: { type: faBoxOpen, cost: faBolt },
@@ -203,7 +209,7 @@
     </div>
     <div class="image-info-group">
       <div class="card-bottom-left">{card.name || 'Card name here'}</div>
-      <div class="card-bottom-right card-type">
+      <div class="card-bottom-right card-type" style="color: {card.type === 'skill' ? CARD_COLORS[card.color] : 'white'}">
         <Icon data={CARD_ICONS[card.type].type} />
       </div>
     </div>

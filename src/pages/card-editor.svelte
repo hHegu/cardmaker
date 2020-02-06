@@ -20,6 +20,13 @@
     { id: "item", text: "Item" },
     { id: "skill", text: "Skill" }
   ];
+
+  const cardColors = [
+    { id: null, text: "Unset" },
+    { id: "red", text: "Red" },
+    { id: "blue", text: "Blue" },
+    { id: "yellow", text: "Yellow" }
+  ];
 </script>
 
 <style>
@@ -206,6 +213,16 @@
             </label>
             <input type="text" bind:value={card.gold} />
           </div>
+          {#if card.type === 'skill'}
+            <div class="form-el">
+              <label>Card color</label>
+              <select bind:value={card.color}>
+                {#each cardColors as colorOption}
+                  <option value={colorOption.id}>{colorOption.text}</option>
+                {/each}
+              </select>
+            </div>
+          {/if}
           {#if card.type === 'creature'}
             <div class="form-el action-cards">
               <div>
