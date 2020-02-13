@@ -28,10 +28,10 @@
     { id: "yellow", text: "Yellow" }
   ];
 
-  const prepareFileForSending = (files) => {
-    const file = _.get(files, 'target.files.0')
+  const prepareFileForSending = files => {
+    const file = _.get(files, "target.files.0");
     if (file) {
-      dispatch('saveImage', {card, file})
+      dispatch("saveImage", { card, file });
     }
   };
 </script>
@@ -125,7 +125,8 @@
   }
 
   .editor-heading {
-    background: var(--primary-color);
+    background: var(--dark-color);
+    color: #dddddd;
     font-weight: 700;
     padding: 0.5rem 1rem;
     margin: 0;
@@ -191,6 +192,13 @@
             </select>
           </div>
           <div class="form-el">
+            <label>Card image</label>
+            <input
+              type="file"
+              accept="image/png, image/jpeg"
+              on:change={prepareFileForSending} />
+          </div>
+          <div class="form-el">
             <label>Name</label>
             <input bind:value={card.name} />
           </div>
@@ -199,13 +207,6 @@
               <label>{card.type === 'skill' ? 'Mana cost' : 'Health'}</label>
               <input bind:value={card.cost} />
             {/if}
-          </div>
-          <div class="form-el">
-            <label>Card image</label>
-            <input
-              type="file"
-              accept="image/png, image/jpeg"
-              on:change={prepareFileForSending} />
           </div>
           {#if card.type === 'creature'}
             <div class="form-el">

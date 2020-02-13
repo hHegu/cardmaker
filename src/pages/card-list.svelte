@@ -79,8 +79,11 @@
   .card-list {
     display: flex;
     flex: 1;
-    flex-direction: column;
+    flex-direction: row;
     overflow: auto;
+    flex-wrap: wrap;
+    max-height: 100%;
+    background: var(--background-color);
   }
 
   .card-container {
@@ -89,8 +92,6 @@
 
   .card {
     position: relative;
-    width: 100%;
-    height: 100%;
   }
 
   .testing {
@@ -98,6 +99,7 @@
     bottom: 1rem;
     right: 1rem;
   }
+
   .card-overlay {
     width: 100%;
     height: 100%;
@@ -107,73 +109,47 @@
     left: 0;
     transition: 0.2s;
     opacity: 0;
-    display: flex;
     justify-content: center;
     align-items: center;
   }
+
   .card:hover .card-overlay {
+    display: flex;
     opacity: 1;
-  }
-
-  .category-heading {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 0;
-  }
-
-  .category-title {
-    padding: 0.5rem 1rem 0 1rem;
-  }
-
-  .category-cards {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0 0.5rem;
-  }
-
-  .category-cards.collapsed {
-    display: none;
   }
 
   @media print {
     .card-container {
       padding: 0;
     }
+    .testing {
+      display: none;
+    }
+    .card-list {
+      max-height: none;
+      background: white;
+      overflow: visible;
+    }
+    .card-container:nth-child(9n) {
+      padding-bottom: calc(var(--a4-height) - var(--card-height) * 3);
+    }
   }
 </style>
 
 <div class="card-list">
-  {#each categorizedCards as category}
-    <div class="card-category">
-      <div class="category-title">
-        <button
-          class="category-heading"
-          on:click={() => (category.collapsed = !category.collapsed)}>
-          <span>{_.capitalize(category.categoryName)}s</span>
-          <Icon data={category.collapsed ? faChevronDown : faChevronUp} />
-        </button>
-      </div>
-      <div class={`category-cards ${category.collapsed ? 'collapsed' : ''}`}>
-        {#each category.cards as card}
-          <div class="card-container">
-            <div class="card">
-              <Card {card} />
-              <div class="card-overlay">
-                <button on:click={() => dispatch('edit', card)}>Edit</button>
-                <button
-                  on:click={() => dispatch('copy', card)}
-                  style="margin: 0 0.5rem">
-                  Copy
-                </button>
-                <button on:click={() => dispatch('delete', card)}>
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        {/each}
+  {#each cards as card}
+    <div class="card-container">
+      <div class="card">
+        <Card {card} />
+        <div class="card-overlay">
+          <button on:click={() => dispatch('edit', card)}>Edit</button>
+          <button
+            on:click={() => dispatch('copy', card)}
+            style="margin: 0 0.5rem">
+            Copy
+          </button>
+          <button on:click={() => dispatch('delete', card)}>Delete</button>
+        </div>
       </div>
     </div>
   {/each}
@@ -186,5 +162,4 @@
     }}>
     Testing card
   </button>
-  <button on:click={() => dispatch('back')}>Landing page</button>
 </div>

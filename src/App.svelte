@@ -11,6 +11,7 @@
   import CardList from "./pages/card-list.svelte";
   import Notifications from "./components/notifications.svelte";
   import firebaseConfig from "./config/firebase-config.json";
+  import NavBar from "./components/nav-bar.svelte";
 
   let currentCard;
   let page = "card-editor";
@@ -178,16 +179,23 @@
       notification => notification.id !== id
     );
   };
+
+  const changePage = ({ detail }) => {
+    page = detail;
+  };
 </script>
 
 <style>
-  main {
+  .main {
     font-family: Roboto;
     height: 100%;
+    display: flex;
+    flex-direction: column;
   }
   .cardmaker {
     display: flex;
     height: 100%;
+    min-height: 0;
   }
 
   .spinner {
@@ -198,7 +206,8 @@
   }
 </style>
 
-<main>
+<div class="main">
+  <NavBar currentPage={page} on:changePage={changePage} />
   {#if page === 'card-editor'}
     <div class="cardmaker">
       <CardEditor
@@ -224,10 +233,10 @@
       {/if}
 
     </div>
-  {:else}
+  {:else if page === 'lander'}
     <Lander
       on:card-editor={newCard}
       on:card-list={() => (page = 'card-editor')} />
   {/if}
   <Notifications {notifications} />
-</main>
+</div>

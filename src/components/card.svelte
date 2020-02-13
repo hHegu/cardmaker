@@ -21,17 +21,17 @@
     attack: {
       color: "#f44336",
       icon:
-        "https://vectr.com/hhegu/bI7HJ2fw.svg?width=130&height=130&select=bbHS490oX"
+        "https://vectr.com/hhegu/ffY7aqkg6.svg?width=130&height=130&select=bbHS490oX"
     },
     defend: {
       color: "#64b5f6",
       icon:
-        "https://vectr.com/hhegu/bI7HJ2fw.svg?width=130&height=130&select=b6lgrj3lp"
+        "https://vectr.com/hhegu/ffY7aqkg6.svg?width=130&height=130&select=b6lgrj3lp"
     },
     special: {
       color: "#fbc02d",
       icon:
-        "https://vectr.com/hhegu/bI7HJ2fw.svg?width=130&height=130&select=c7nTglNvy"
+        "https://vectr.com/hhegu/ffY7aqkg6.svg?width=130&height=130&select=e2i40QlCDX"
     }
   };
 
@@ -66,8 +66,8 @@
 
 <style>
   .card {
-    width: 2.5in; /* ~63mm */
-    height: 3.5in; /* ~88mm */
+    width: var(--card-width); /* ~63mm */
+    height: var(--card-height); /* ~88mm */
     font-size: 2.5mm;
     background: white;
     display: flex;
@@ -79,7 +79,6 @@
     height: 35mm;
     flex-shrink: 0;
     flex-grow: 0;
-    background: aliceblue;
     display: flex;
     flex-direction: column;
 
@@ -128,6 +127,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    background: white;
   }
 
   .ability {
@@ -179,6 +179,7 @@
     align-items: center;
     padding: 1mm;
     line-height: 0;
+    background: white;
   }
 
   .footer-right > span {
@@ -189,7 +190,6 @@
   @media print {
     .card {
       box-shadow: none;
-      border: 1px solid #4e4e4e;
       transform: none !important;
     }
   }
