@@ -16,30 +16,7 @@
   import OneStack from "../icons/oneStack.svelte";
   import TwoStack from "../icons/twoStack.svelte";
   import ThreeStack from "../icons/threeStack.svelte";
-
-  const ABILITY_CONFIG = {
-    attack: {
-      color: "#f44336",
-      icon:
-        "https://vectr.com/hhegu/ffY7aqkg6.svg?width=130&height=130&select=bbHS490oX"
-    },
-    defend: {
-      color: "#64b5f6",
-      icon:
-        "https://vectr.com/hhegu/ffY7aqkg6.svg?width=130&height=130&select=b6lgrj3lp"
-    },
-    special: {
-      color: "#fbc02d",
-      icon:
-        "https://vectr.com/hhegu/ffY7aqkg6.svg?width=130&height=130&select=e2i40QlCDX"
-    }
-  };
-
-  const CARD_COLORS = {
-    red: "#f44336",
-    blue: "#64b5f6",
-    yellow: "#fbc02d",
-  }
+  import { ABILITY_CONFIG, CARD_COLORS } from "../util/constants.js";
 
   const CARD_ICONS = {
     creature: { type: faDragon, cost: faHeart },
@@ -209,7 +186,9 @@
     </div>
     <div class="image-info-group">
       <div class="card-bottom-left">{card.name || 'Card name here'}</div>
-      <div class="card-bottom-right card-type" style="color: {card.type === 'skill' ? CARD_COLORS[card.color] : 'white'}">
+      <div
+        class="card-bottom-right card-type"
+        style="color: {card.type === 'skill' ? CARD_COLORS[card.color] : 'white'}">
         <Icon data={CARD_ICONS[card.type].type} />
       </div>
     </div>

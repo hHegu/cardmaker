@@ -3,6 +3,7 @@
   import uuidv1 from "uuid/v1";
 
   import Card from "../components/card.svelte";
+  import CardTypeTag from "../components/card-type-tag.svelte";
 
   import Icon from "svelte-awesome";
 
@@ -73,6 +74,8 @@
     );
 
   $: categorizedCards = categorize(cards);
+
+  $: sortedCards = _.sortBy(cards, 'type')
 </script>
 
 <style>
@@ -96,7 +99,7 @@
 
   .testing {
     position: fixed;
-    bottom: 1rem;
+    top: 1rem;
     right: 1rem;
   }
 
@@ -111,10 +114,12 @@
     opacity: 0;
     justify-content: center;
     align-items: center;
+    display: flex;
+    visibility: hidden;
   }
 
   .card:hover .card-overlay {
-    display: flex;
+    visibility: visible;
     opacity: 1;
   }
 
@@ -137,8 +142,9 @@
 </style>
 
 <div class="card-list">
-  {#each cards as card}
+  {#each sortedCards as card}
     <div class="card-container">
+      <CardTypeTag type={card.type} />
       <div class="card">
         <Card {card} />
         <div class="card-overlay">
